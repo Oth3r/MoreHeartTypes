@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "more_heart_types",
+  "version": "${version}",
+  "name": "More Heart Types",
+  "description": "",
+  "authors": ["Oth3r", "ShanicMCA"],
+  "contact": {
+    "repo": "https://github.com/Oth3r/More Heart Types"
+  },
+  "license": "MIT",
+  "icon": "assets/more_heart_types/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "one.oth3r.more_heart_types.MoreHeartTypes"
+    ]
+  },
+  "mixins": [
+    "more_heart_types.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

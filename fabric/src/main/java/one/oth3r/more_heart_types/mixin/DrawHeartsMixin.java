@@ -33,11 +33,11 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            Identifier texture = new Identifier("hud/heart/starve_full");
-            if (half) texture = new Identifier("hud/heart/starve_half");
+            Identifier texture = Identifier.of("hud/heart/starve_full");
+            if (half) texture = Identifier.of("hud/heart/starve_half");
             if (container) {
-                texture = new Identifier("hud/heart/starve_container");
-                if (blinking) texture = new Identifier("hud/heart/starve_container_blinking");
+                texture = Identifier.of("hud/heart/starve_container");
+                if (blinking) texture = Identifier.of("hud/heart/starve_container_blinking");
             }
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();
@@ -51,17 +51,17 @@ public class DrawHeartsMixin {
         if (damageSource == null) return;
 
         // PRINT!! IGNORE
-//        System.out.println(damageSource.getType().msgId());
+        System.out.println(damageSource.getType().msgId());
 
         // thorns / cactus / berry bush
         if (damageSource.getType().msgId().equals("cactus") ||
                 damageSource.getType().msgId().equals("thorns") ||
                 damageSource.getType().msgId().equals("sweetBerryBush")) {
-            Identifier texture = new Identifier("hud/heart/thorns_full");
-            if (half) texture = new Identifier("hud/heart/thorns_half");
+            Identifier texture = Identifier.of("hud/heart/thorns_full");
+            if (half) texture = Identifier.of("hud/heart/thorns_half");
             if (container) {
-                texture = new Identifier("hud/heart/thorns_container");
-                if (blinking) texture = new Identifier("hud/heart/thorns_container_blinking");
+                texture = Identifier.of("hud/heart/thorns_container");
+                if (blinking) texture = Identifier.of("hud/heart/thorns_container_blinking");
             }
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();
@@ -69,8 +69,8 @@ public class DrawHeartsMixin {
 
         // suffocation
         if (damageSource.getType().msgId().equals("inWall")) {
-            Identifier texture = new Identifier("hud/heart/suffocate_full");
-            if (half) texture = new Identifier("hud/heart/suffocate_half");
+            Identifier texture = Identifier.of("hud/heart/suffocate_full");
+            if (half) texture = Identifier.of("hud/heart/suffocate_half");
             if (container) return;
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();
@@ -78,8 +78,8 @@ public class DrawHeartsMixin {
 
         // drowning
         if (damageSource.getType().msgId().equals("drown")) {
-            Identifier texture = new Identifier("hud/heart/drown_full");
-            if (half) texture = new Identifier("hud/heart/drown_half");
+            Identifier texture = Identifier.of("hud/heart/drown_full");
+            if (half) texture = Identifier.of("hud/heart/drown_half");
             if (container) return;
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();
@@ -87,8 +87,8 @@ public class DrawHeartsMixin {
 
         // void
         if (damageSource.getType().msgId().equals("outOfWorld")) {
-            Identifier texture = new Identifier("hud/heart/void_full");
-            if (half) texture = new Identifier("hud/heart/void_half");
+            Identifier texture = Identifier.of("hud/heart/void_full");
+            if (half) texture = Identifier.of("hud/heart/void_half");
             if (container) return;
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();
@@ -98,9 +98,10 @@ public class DrawHeartsMixin {
         if (damageSource.getType().msgId().equals("lava") ||
                 damageSource.getType().msgId().equals("onFire") ||
                 damageSource.getType().msgId().equals("inFire") ||
-                damageSource.getType().msgId().equals("hotFloor")) {
-            Identifier texture = new Identifier("hud/heart/fire_full");
-            if (half) texture = new Identifier("hud/heart/fire_half");
+                damageSource.getType().msgId().equals("hotFloor") ||
+                damageSource.getType().msgId().equals("campfire")) {
+            Identifier texture = Identifier.of("hud/heart/fire_full");
+            if (half) texture = Identifier.of("hud/heart/fire_half");
             if (container) return;
             context.drawGuiTexture(texture, x, y, 9, 9);
             ci.cancel();

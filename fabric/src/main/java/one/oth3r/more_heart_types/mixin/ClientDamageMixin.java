@@ -17,7 +17,7 @@ public class ClientDamageMixin {
 
     @Shadow @Final protected MinecraftClient client;
 
-    @Inject(method = "damage", at = @At("HEAD"))
+    @Inject(method = "damage", at = @At(value = "HEAD"))
     public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         // make sure the player is vaild
         PlayerEntity player = this.client.player;

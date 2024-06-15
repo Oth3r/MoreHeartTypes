@@ -21,7 +21,7 @@ public class DrawHeartsMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "drawHeart", at = @At(value = "HEAD"), cancellable = true)
-    private void drawHeart(DrawContext context, InGameHud.HeartType type, int x, int y, boolean hardcore, boolean blinking, boolean half, CallbackInfo ci) {
+    private void drawHeart(DrawContext context, InGameHud.HeartType type, int x, int y, int v, boolean blinking, boolean half, CallbackInfo ci) {
         // only run if normal heart or a container heart
         if (!(type.equals(InGameHud.HeartType.NORMAL) || type.equals(InGameHud.HeartType.CONTAINER))) return;
         // add a container boolean for when the heart type is a container
@@ -33,13 +33,13 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            Identifier texture = new Identifier("hud/heart/starve_full");
-            if (half) texture = new Identifier("hud/heart/starve_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/starve_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/starve_half.png");
             if (container) {
-                texture = new Identifier("hud/heart/starve_container");
-                if (blinking) texture = new Identifier("hud/heart/starve_container_blinking");
+                texture = new Identifier("textures/gui/sprites/hud/heart/starve_container.png");
+                if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/starve_container_blinking.png");
             }
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            context.drawTexture(texture, x, y,0,0, 9, 9,9,9);
             ci.cancel();
         }
 
@@ -57,40 +57,40 @@ public class DrawHeartsMixin {
         if (damageSource.getType().msgId().equals("cactus") ||
                 damageSource.getType().msgId().equals("thorns") ||
                 damageSource.getType().msgId().equals("sweetBerryBush")) {
-            Identifier texture = new Identifier("hud/heart/thorns_full");
-            if (half) texture = new Identifier("hud/heart/thorns_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/thorns_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/thorns_half.png");
             if (container) {
-                texture = new Identifier("hud/heart/thorns_container");
-                if (blinking) texture = new Identifier("hud/heart/thorns_container_blinking");
+                texture = new Identifier("textures/gui/sprites/hud/heart/thorns_container.png");
+                if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/thorns_container_blinking.png");
             }
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            context.drawTexture(texture, x, y,0,0, 9, 9,9,9);
             ci.cancel();
         }
 
         // suffocation
         if (damageSource.getType().msgId().equals("inWall")) {
-            Identifier texture = new Identifier("hud/heart/suffocate_full");
-            if (half) texture = new Identifier("hud/heart/suffocate_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_half.png");
             if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            context.drawTexture(texture, x, y,0,0, 9, 9,9,9);
             ci.cancel();
         }
 
         // drowning
         if (damageSource.getType().msgId().equals("drown")) {
-            Identifier texture = new Identifier("hud/heart/drown_full");
-            if (half) texture = new Identifier("hud/heart/drown_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/drown_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/drown_half.png");
             if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            context.drawTexture(texture, x, y,0,0, 9, 9,9,9);
             ci.cancel();
         }
 
         // void
         if (damageSource.getType().msgId().equals("outOfWorld")) {
-            Identifier texture = new Identifier("hud/heart/void_full");
-            if (half) texture = new Identifier("hud/heart/void_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/void_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/void_half.png");
             if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            context.drawTexture(texture, x, y,0,0, 9, 9,9,9);
             ci.cancel();
         }
 
@@ -99,10 +99,11 @@ public class DrawHeartsMixin {
                 damageSource.getType().msgId().equals("onFire") ||
                 damageSource.getType().msgId().equals("inFire") ||
                 damageSource.getType().msgId().equals("hotFloor")) {
-            Identifier texture = new Identifier("hud/heart/fire_full");
-            if (half) texture = new Identifier("hud/heart/fire_half");
+            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/fire_full.png");
+            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/fire_half.png");
             if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
+            // not animated for some reason,,,
+            context.drawTexture(texture, x, y,0,0, 9, 9, 9, 72);
             ci.cancel();
         }
     }

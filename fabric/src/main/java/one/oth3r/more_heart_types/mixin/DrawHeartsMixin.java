@@ -53,12 +53,12 @@ public class DrawHeartsMixin extends DrawableHelper {
         if (damageSource == null) return;
 
         // PRINT!! IGNORE
-//        System.out.println(damageSource.getType().msgId());
+//        System.out.println(damageSource.getName());
 
         // thorns / cactus / berry bush
-        if (damageSource.getType().msgId().equals("cactus") ||
-                damageSource.getType().msgId().equals("thorns") ||
-                damageSource.getType().msgId().equals("sweetBerryBush")) {
+        if (damageSource.getName().equals("cactus") ||
+                damageSource.getName().equals("thorns") ||
+                damageSource.getName().equals("sweetBerryBush")) {
             Identifier texture = new Identifier("textures/gui/sprites/hud/heart/thorns_full.png");
             if (half) texture = new Identifier("textures/gui/sprites/hud/heart/thorns_half.png");
             if (container) {
@@ -69,7 +69,7 @@ public class DrawHeartsMixin extends DrawableHelper {
         }
 
         // suffocation
-        if (damageSource.getType().msgId().equals("inWall")) {
+        if (damageSource.getName().equals("inWall")) {
             Identifier texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_full.png");
             if (half) texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_half.png");
             if (container) return;
@@ -77,7 +77,7 @@ public class DrawHeartsMixin extends DrawableHelper {
         }
 
         // drowning
-        if (damageSource.getType().msgId().equals("drown")) {
+        if (damageSource.getName().equals("drown")) {
             Identifier texture = new Identifier("textures/gui/sprites/hud/heart/drown_full.png");
             if (half) texture = new Identifier("textures/gui/sprites/hud/heart/drown_half.png");
             if (container) return;
@@ -85,7 +85,7 @@ public class DrawHeartsMixin extends DrawableHelper {
         }
 
         // void
-        if (damageSource.getType().msgId().equals("outOfWorld")) {
+        if (damageSource.getName().equals("outOfWorld")) {
             Identifier texture = new Identifier("textures/gui/sprites/hud/heart/void_full.png");
             if (half) texture = new Identifier("textures/gui/sprites/hud/heart/void_half.png");
             if (container) return;
@@ -93,10 +93,10 @@ public class DrawHeartsMixin extends DrawableHelper {
         }
 
         // fire / lava / campfire / magma
-        if (damageSource.getType().msgId().equals("lava") ||
-                damageSource.getType().msgId().equals("onFire") ||
-                damageSource.getType().msgId().equals("inFire") ||
-                damageSource.getType().msgId().equals("hotFloor")) {
+        if (damageSource.getName().equals("lava") ||
+                damageSource.getName().equals("onFire") ||
+                damageSource.getName().equals("inFire") ||
+                damageSource.getName().equals("hotFloor")) {
             Identifier texture = new Identifier("textures/gui/sprites/hud/heart/fire_full.png");
             if (half) texture = new Identifier("textures/gui/sprites/hud/heart/fire_half.png");
             if (container) return;

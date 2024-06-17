@@ -43,8 +43,6 @@ public class DrawHeartsMixin {
         DamageSource damageSource = player.getRecentDamageSource();
         if (damageSource == null) return;
 
-        // PRINT!! IGNORE
-//        System.out.println(damageSource.getType().msgId());
 
         // thorns / cactus / berry bush
         if (damageSource.getType().msgId().equals("cactus") ||

@@ -33,14 +33,7 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            Identifier texture = Identifier.of("hud/heart/starve_full");
-            if (half) texture = Identifier.of("hud/heart/starve_half");
-            if (container) {
-                texture = Identifier.of("hud/heart/starve_container");
-                if (blinking) texture = Identifier.of("hud/heart/starve_container_blinking");
-            }
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"starve",false);
         }
 
         // only if the player has taken damage in the last 20 ticks
@@ -51,47 +44,28 @@ public class DrawHeartsMixin {
         if (damageSource == null) return;
 
         // PRINT!! IGNORE
-        System.out.println(damageSource.getType().msgId());
+//        System.out.println(damageSource.getType().msgId());
 
         // thorns / cactus / berry bush
         if (damageSource.getType().msgId().equals("cactus") ||
                 damageSource.getType().msgId().equals("thorns") ||
                 damageSource.getType().msgId().equals("sweetBerryBush")) {
-            Identifier texture = Identifier.of("hud/heart/thorns_full");
-            if (half) texture = Identifier.of("hud/heart/thorns_half");
-            if (container) {
-                texture = Identifier.of("hud/heart/thorns_container");
-                if (blinking) texture = Identifier.of("hud/heart/thorns_container_blinking");
-            }
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"thorns",true);
         }
 
         // suffocation
         if (damageSource.getType().msgId().equals("inWall")) {
-            Identifier texture = Identifier.of("hud/heart/suffocate_full");
-            if (half) texture = Identifier.of("hud/heart/suffocate_half");
-            if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"suffocate",false);
         }
 
         // drowning
         if (damageSource.getType().msgId().equals("drown")) {
-            Identifier texture = Identifier.of("hud/heart/drown_full");
-            if (half) texture = Identifier.of("hud/heart/drown_half");
-            if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"drown",false);
         }
 
         // void
         if (damageSource.getType().msgId().equals("outOfWorld")) {
-            Identifier texture = Identifier.of("hud/heart/void_full");
-            if (half) texture = Identifier.of("hud/heart/void_half");
-            if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"void",false);
         }
 
         // fire / lava / campfire / magma
@@ -100,11 +74,19 @@ public class DrawHeartsMixin {
                 damageSource.getType().msgId().equals("inFire") ||
                 damageSource.getType().msgId().equals("hotFloor") ||
                 damageSource.getType().msgId().equals("campfire")) {
-            Identifier texture = Identifier.of("hud/heart/fire_full");
-            if (half) texture = Identifier.of("hud/heart/fire_half");
-            if (container) return;
-            context.drawGuiTexture(texture, x, y, 9, 9);
-            ci.cancel();
+            render(ci,context,x,y,half,blinking,container,"fire",false);
         }
+    }
+
+    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
+        Identifier texture = Identifier.of("hud/heart/"+name+"_full");
+        if (half) texture = Identifier.of("hud/heart/"+name+"_half");
+        if (container) {
+            if (!renderContainer) return;
+            texture = Identifier.of("hud/heart/"+name+"_container");
+            if (blinking) texture = Identifier.of("hud/heart/"+name+"_container_blinking");
+        }
+        context.drawGuiTexture(texture, x, y, 9, 9);
+        ci.cancel();
     }
 }

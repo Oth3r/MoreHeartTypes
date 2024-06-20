@@ -1,0 +1,32 @@
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+
+modLoader="javafml" #mandatory
+loaderVersion="${loader_version_range}" #mandatory
+
+license="MIT"
+
+# A URL to refer people to when problems occur with this mod
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+
+# The modid of the mod
+modId="${mod_id}" #mandatory
+
+# The version number of the mod
+version="${mod_version}" #mandatory
+
+# A display name for the mod
+displayName="${mod_name}" #mandatory
+
+displayURL="https://modrinth.com/mod/more-heart-types"
+
+logoFile="assets/more_heart_types/icon.png"
+
+authors="Oth3r, ShanicMCA"
+
+description='''Adds more heart textures when taking consistent damage!'''
+
+[[mixins]]
+config="${mod_id}.mixins.json"

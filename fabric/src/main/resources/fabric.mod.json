@@ -2,11 +2,13 @@
   "schemaVersion": 1,
   "id": "more_heart_types",
   "version": "${version}",
-  "name": "More Heart Types",
-  "description": "",
+  "name": "${mod_name}",
+  "description": "A mod that adds more heart textures when taking damage from certain types.",
   "authors": ["Oth3r", "ShanicMCA"],
   "contact": {
-    "repo": "https://github.com/Oth3r/More Heart Types"
+    "homepage": "https://modrinth.com/mod/more-heart-types",
+    "issues": "https://github.com/Oth3r/MoreHeartTypes/issues",
+    "sources": "https://github.com/Oth3r/MoreHeartTypes"
   },
   "license": "MIT",
   "icon": "assets/more_heart_types/icon.png",

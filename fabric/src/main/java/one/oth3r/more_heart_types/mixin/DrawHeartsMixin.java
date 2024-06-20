@@ -11,6 +11,7 @@ import one.oth3r.more_heart_types.MoreHeartTypes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,55 +37,79 @@ public class DrawHeartsMixin {
             render(ci,context,x,y,half,blinking,container,"starve",false);
         }
 
-        // only if the player has taken damage in the last 20 ticks
-        if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > 20) return;
-
         // get the damageSource and make sure its valid
         DamageSource damageSource = player.getRecentDamageSource();
         if (damageSource == null) return;
 
 
         // thorns / cactus / berry bush
-        if (damageSource.getType().msgId().equals("cactus") ||
-                damageSource.getType().msgId().equals("thorns") ||
-                damageSource.getType().msgId().equals("sweetBerryBush")) {
+        if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
             render(ci,context,x,y,half,blinking,container,"thorns",true);
         }
 
         // suffocation
-        if (damageSource.getType().msgId().equals("inWall")) {
+        if (checkDamage(player, 20, damageSource,"inWall")) {
             render(ci,context,x,y,half,blinking,container,"suffocate",false);
         }
 
         // drowning
-        if (damageSource.getType().msgId().equals("drown")) {
+        if (checkDamage(player, 20, damageSource,"drown")) {
             render(ci,context,x,y,half,blinking,container,"drown",false);
         }
 
         // void
-        if (damageSource.getType().msgId().equals("outOfWorld")) {
+        if (checkDamage(player, 20, damageSource,"outOfWorld")) {
             render(ci,context,x,y,half,blinking,container,"void",false);
         }
 
         // fire / lava / campfire / magma
-        if (damageSource.getType().msgId().equals("lava") ||
-                damageSource.getType().msgId().equals("onFire") ||
-                damageSource.getType().msgId().equals("inFire") ||
-                damageSource.getType().msgId().equals("hotFloor") ||
-                damageSource.getType().msgId().equals("campfire")) {
+        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire")) {
             render(ci,context,x,y,half,blinking,container,"fire",false);
         }
     }
 
+    /**
+     * checks if the heart can be rendered, by checking if the time since last damage is good and the damage source is correct
+     * @param player the player
+     * @param time max time since last damage
+     * @param damageSource the last damage source
+     * @param strings the correct damage types for the heart
+     * @return if the heart can be rendered or not
+     */
+    @Unique
+    private static boolean checkDamage(PlayerEntity player, int time, DamageSource damageSource, String... strings) {
+        // check if the time is under the max
+        if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > time) return false;
+        // check if the damage type matches the criteria
+        for (String string : strings) {
+            if (damageSource.getType().msgId().equals(string)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * renders the heart
+     * @param name the name for the heart texture
+     * @param renderContainer if there is a custom container for the heart
+     */
+    @Unique
     private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
+        // get the textures
         Identifier texture = Identifier.of("hud/heart/"+name+"_full");
         if (half) texture = Identifier.of("hud/heart/"+name+"_half");
+
+        // if container texture
         if (container) {
+            // quit if theres no custom container texture
             if (!renderContainer) return;
+            // get the container textures
             texture = Identifier.of("hud/heart/"+name+"_container");
             if (blinking) texture = Identifier.of("hud/heart/"+name+"_container_blinking");
         }
+
+        // draw the texture
         context.drawGuiTexture(texture, x, y, 9, 9);
+        // cancel the drawing of the other texture
         ci.cancel();
     }
 }

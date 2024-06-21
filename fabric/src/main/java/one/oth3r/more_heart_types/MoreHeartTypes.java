@@ -1,12 +1,12 @@
 package one.oth3r.more_heart_types;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MoreHeartTypes implements ModInitializer {
+public class MoreHeartTypes implements ClientModInitializer {
     // track the time since last damaged
     public static long lastDamageTicks = 0;
 
@@ -15,7 +15,7 @@ public class MoreHeartTypes implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("More Heart Types");
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         LOGGER.info("Successfully loaded More Heart Types v{}!", VERSION);
     }
 }

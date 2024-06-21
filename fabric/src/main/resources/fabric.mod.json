@@ -14,7 +14,7 @@
   "icon": "assets/more_heart_types/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "one.oth3r.more_heart_types.MoreHeartTypes"
     ]
   },

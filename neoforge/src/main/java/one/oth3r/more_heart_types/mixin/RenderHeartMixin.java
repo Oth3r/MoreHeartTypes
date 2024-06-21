@@ -94,16 +94,16 @@ public abstract class RenderHeartMixin {
     @Unique
     private static void render(CallbackInfo ci, GuiGraphics pGuiGraphics, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
         // get the textures
-        ResourceLocation texture = ResourceLocation.withDefaultNamespace("hud/heart/"+name+"_full");
-        if (half) texture = ResourceLocation.withDefaultNamespace("hud/heart/"+name+"_half");
+        ResourceLocation texture = new ResourceLocation("hud/heart/"+name+"_full");
+        if (half) texture = new ResourceLocation("hud/heart/"+name+"_half");
 
         // if container texture
         if (container) {
             // quit if theres no custom container texture
             if (!renderContainer) return;
             // get the container textures
-            texture = ResourceLocation.withDefaultNamespace("hud/heart/"+name+"_container");
-            if (blinking) texture = ResourceLocation.withDefaultNamespace("hud/heart/"+name+"_container_blinking");
+            texture = new ResourceLocation("hud/heart/"+name+"_container");
+            if (blinking) texture = new ResourceLocation("hud/heart/"+name+"_container_blinking");
         }
 
         // draw the texture

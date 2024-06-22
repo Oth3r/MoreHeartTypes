@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class DrawHeartsMixin {
 
+    @Unique private final String[] customFire = {"create.fan_lava", "create.fan_fire"};
+
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "drawHeart", at = @At(value = "HEAD"), cancellable = true)
@@ -41,7 +43,6 @@ public class DrawHeartsMixin {
         DamageSource damageSource = player.getRecentDamageSource();
         if (damageSource == null) return;
 
-
         // thorns / cactus / berry bush
         if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
             render(ci,context,x,y,half,blinking,container,"thorns",true);
@@ -63,8 +64,9 @@ public class DrawHeartsMixin {
         }
 
         // fire / lava / campfire / magma
-        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire")) {
-            render(ci,context,x,y,half,blinking,container,"fire",false);
+        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
+                customFire[0], customFire[1])) {
+            render(ci,context,x,y,half,blinking,container,"static_fire",false);
         }
     }
 
@@ -95,16 +97,16 @@ public class DrawHeartsMixin {
     @Unique
     private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
         // get the textures
-        Identifier texture = new Identifier("hud/heart/"+name+"_full");
-        if (half) texture = new Identifier("hud/heart/"+name+"_half");
+        Identifier texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_full.png");
+        if (half) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_half.png");
 
         // if container texture
         if (container) {
             // quit if theres no custom container texture
             if (!renderContainer) return;
             // get the container textures
-            texture = new Identifier("hud/heart/"+name+"_container");
-            if (blinking) texture = new Identifier("hud/heart/"+name+"_container_blinking");
+            texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container.png");
+            if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container_blinking.png");
         }
 
         // draw the texture

@@ -1,10 +1,8 @@
 package one.oth3r.more_heart_types.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,12 +17,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public class DrawHeartsMixin extends DrawableHelper {
+public class DrawHeartsMixin {
+
+    @Unique private final String[] customFire = {"create.fan_lava", "create.fan_fire"};
 
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "drawHeart", at = @At(value = "HEAD"), cancellable = true)
-    private void drawHeart(MatrixStack matrices, InGameHud.HeartType type, int x, int y, int v, boolean blinking, boolean half, CallbackInfo ci) {
+    private void drawHeart(DrawContext context, InGameHud.HeartType type, int x, int y, int v, boolean blinking, boolean half, CallbackInfo ci) {
         // only run if normal heart or a container heart
         if (!(type.equals(InGameHud.HeartType.NORMAL) || type.equals(InGameHud.HeartType.CONTAINER))) return;
         // add a container boolean for when the heart type is a container
@@ -36,83 +36,82 @@ public class DrawHeartsMixin extends DrawableHelper {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/starve_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/starve_half.png");
-            if (container) {
-                texture = new Identifier("textures/gui/sprites/hud/heart/starve_container.png");
-                if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/starve_container_blinking.png");
-            }
-            draw(texture,ci,matrices,x,y);
+            render(ci,context,x,y,half,blinking,container,"starve",false);
         }
-
-        // only if the player has taken damage in the last 20 ticks
-        if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > 20) return;
 
         // get the damageSource and make sure its valid
         DamageSource damageSource = player.getRecentDamageSource();
         if (damageSource == null) return;
 
-        // PRINT!! IGNORE
-//        System.out.println(damageSource.getType().msgId());
-
         // thorns / cactus / berry bush
-        if (damageSource.getType().msgId().equals("cactus") ||
-                damageSource.getType().msgId().equals("thorns") ||
-                damageSource.getType().msgId().equals("sweetBerryBush")) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/thorns_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/thorns_half.png");
-            if (container) {
-                texture = new Identifier("textures/gui/sprites/hud/heart/thorns_container.png");
-                if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/thorns_container_blinking.png");
-            }
-            draw(texture,ci,matrices,x,y);
+        if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
+            render(ci,context,x,y,half,blinking,container,"thorns",true);
         }
 
         // suffocation
-        if (damageSource.getType().msgId().equals("inWall")) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/suffocate_half.png");
-            if (container) return;
-            draw(texture,ci,matrices,x,y);
+        if (checkDamage(player, 20, damageSource,"inWall")) {
+            render(ci,context,x,y,half,blinking,container,"suffocate",false);
         }
 
         // drowning
-        if (damageSource.getType().msgId().equals("drown")) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/drown_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/drown_half.png");
-            if (container) return;
-            draw(texture,ci,matrices,x,y);
+        if (checkDamage(player, 20, damageSource,"drown")) {
+            render(ci,context,x,y,half,blinking,container,"drown",false);
         }
 
         // void
-        if (damageSource.getType().msgId().equals("outOfWorld")) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/void_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/void_half.png");
-            if (container) return;
-            draw(texture,ci,matrices,x,y);
+        if (checkDamage(player, 20, damageSource,"outOfWorld")) {
+            render(ci,context,x,y,half,blinking,container,"void",false);
         }
 
         // fire / lava / campfire / magma
-        if (damageSource.getType().msgId().equals("lava") ||
-                damageSource.getType().msgId().equals("onFire") ||
-                damageSource.getType().msgId().equals("inFire") ||
-                damageSource.getType().msgId().equals("hotFloor")) {
-            Identifier texture = new Identifier("textures/gui/sprites/hud/heart/fire_full.png");
-            if (half) texture = new Identifier("textures/gui/sprites/hud/heart/fire_half.png");
-            if (container) return;
-            // not animated for some reason,,,
-            draw(texture,ci,matrices,x,y,9,72);
+        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
+                customFire[0], customFire[1])) {
+            render(ci,context,x,y,half,blinking,container,"static_fire",false);
         }
     }
 
-    @Unique private static void draw(Identifier texture, CallbackInfo ci, MatrixStack matrices, int x, int y) {
-        draw(texture,ci,matrices,x,y,9,9);
+    /**
+     * checks if the heart can be rendered, by checking if the time since last damage is good and the damage source is correct
+     * @param player the player
+     * @param time max time since last damage
+     * @param damageSource the last damage source
+     * @param strings the correct damage types for the heart
+     * @return if the heart can be rendered or not
+     */
+    @Unique
+    private static boolean checkDamage(PlayerEntity player, int time, DamageSource damageSource, String... strings) {
+        // check if the time is under the max
+        if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > time) return false;
+        // check if the damage type matches the criteria
+        for (String string : strings) {
+            if (damageSource.getType().msgId().equals(string)) return true;
+        }
+        return false;
     }
 
-    @Unique private static void draw(Identifier texture, CallbackInfo ci, MatrixStack matrices, int x, int y, int textureX, int textureY) {
-        RenderSystem.setShaderTexture(0, texture);
-        drawTexture(matrices, x, y, 0, 0, 9, 9,9,textureX,textureY);
-        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+    /**
+     * renders the heart
+     * @param name the name for the heart texture
+     * @param renderContainer if there is a custom container for the heart
+     */
+    @Unique
+    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
+        // get the textures
+        Identifier texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_full.png");
+        if (half) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_half.png");
+
+        // if container texture
+        if (container) {
+            // quit if theres no custom container texture
+            if (!renderContainer) return;
+            // get the container textures
+            texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container.png");
+            if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container_blinking.png");
+        }
+
+        // draw the texture
+        context.drawTexture(texture, x, y, 0, 0, 9, 9, 9, 9);
+        // cancel the drawing of the other texture
         ci.cancel();
     }
 }

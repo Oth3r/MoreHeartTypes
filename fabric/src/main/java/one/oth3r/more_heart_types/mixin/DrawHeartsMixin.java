@@ -88,7 +88,7 @@ public class DrawHeartsMixin {
         if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > time) return false;
         // check if the damage type matches the criteria
         for (String string : strings) {
-            if (damageSource.getType().msgId().equals(string)) return true;
+            if (damageSource.getName().equals(string)) return true;
         }
         return false;
     }

@@ -1,8 +1,10 @@
 package one.oth3r.more_heart_types.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.minecraft.client.gui.DrawableHelper.drawTexture;
+
 @Mixin(InGameHud.class)
 public class DrawHeartsMixin {
 
@@ -24,7 +28,7 @@ public class DrawHeartsMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "drawHeart", at = @At(value = "HEAD"), cancellable = true)
-    private void drawHeart(DrawContext context, InGameHud.HeartType type, int x, int y, int v, boolean blinking, boolean half, CallbackInfo ci) {
+    private void drawHeart(MatrixStack matrices, InGameHud.HeartType type, int x, int y, int v, boolean blinking, boolean half, CallbackInfo ci) {
         // only run if normal heart or a container heart
         if (!(type.equals(InGameHud.HeartType.NORMAL) || type.equals(InGameHud.HeartType.CONTAINER))) return;
         // add a container boolean for when the heart type is a container
@@ -36,7 +40,7 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            render(ci,context,x,y,half,blinking,container,"starve",false);
+            render(ci,matrices,x,y,half,blinking,container,"starve",false);
         }
 
         // get the damageSource and make sure its valid
@@ -45,28 +49,28 @@ public class DrawHeartsMixin {
 
         // thorns / cactus / berry bush
         if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
-            render(ci,context,x,y,half,blinking,container,"thorns",true);
+            render(ci,matrices,x,y,half,blinking,container,"thorns",true);
         }
 
         // suffocation
         if (checkDamage(player, 20, damageSource,"inWall")) {
-            render(ci,context,x,y,half,blinking,container,"suffocate",false);
+            render(ci,matrices,x,y,half,blinking,container,"suffocate",false);
         }
 
         // drowning
         if (checkDamage(player, 20, damageSource,"drown")) {
-            render(ci,context,x,y,half,blinking,container,"drown",false);
+            render(ci,matrices,x,y,half,blinking,container,"drown",false);
         }
 
         // void
         if (checkDamage(player, 20, damageSource,"outOfWorld")) {
-            render(ci,context,x,y,half,blinking,container,"void",false);
+            render(ci,matrices,x,y,half,blinking,container,"void",false);
         }
 
         // fire / lava / campfire / magma
         if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
                 customFire[0], customFire[1])) {
-            render(ci,context,x,y,half,blinking,container,"static_fire",false);
+            render(ci,matrices,x,y,half,blinking,container,"static_fire",false);
         }
     }
 
@@ -95,7 +99,7 @@ public class DrawHeartsMixin {
      * @param renderContainer if there is a custom container for the heart
      */
     @Unique
-    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
+    private static void render(CallbackInfo ci, MatrixStack matrices, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
         // get the textures
         Identifier texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_full.png");
         if (half) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_half.png");
@@ -110,8 +114,11 @@ public class DrawHeartsMixin {
         }
 
         // draw the texture
-        context.drawTexture(texture, x, y, 0, 0, 9, 9, 9, 9);
-        // cancel the drawing of the other texture
+        RenderSystem.setShaderTexture(0, texture);
+        drawTexture(matrices, x, y, 0, 0, 9, 9,9,9,9);
+        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+
+        // cancel the drawing of the main texture
         ci.cancel();
     }
 }

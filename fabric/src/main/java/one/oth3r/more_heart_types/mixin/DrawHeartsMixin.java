@@ -66,7 +66,7 @@ public class DrawHeartsMixin {
         // fire / lava / campfire / magma
         if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
                 customFire[0], customFire[1])) {
-            render(ci,context,x,y,half,blinking,container,"static_fire",false);
+            render(ci,context,x,y,half,blinking,container,"fire",false);
         }
     }
 
@@ -97,16 +97,16 @@ public class DrawHeartsMixin {
     @Unique
     private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
         // get the textures
-        Identifier texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_full.png");
-        if (half) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_half.png");
+        Identifier texture = new Identifier("hud/heart/"+name+"_full");
+        if (half) texture = new Identifier("hud/heart/"+name+"_half");
 
         // if container texture
         if (container) {
             // quit if theres no custom container texture
             if (!renderContainer) return;
             // get the container textures
-            texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container.png");
-            if (blinking) texture = new Identifier("textures/gui/sprites/hud/heart/"+name+"_container_blinking.png");
+            texture = new Identifier("hud/heart/"+name+"_container");
+            if (blinking) texture = new Identifier("hud/heart/"+name+"_container_blinking");
         }
 
         // draw the texture

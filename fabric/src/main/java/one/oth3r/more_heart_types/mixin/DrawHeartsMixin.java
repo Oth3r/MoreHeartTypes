@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class DrawHeartsMixin {
 
+    @Unique private final String[] customFire = {"create.fan_lava", "create.fan_fire"};
+
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "drawHeart", at = @At(value = "HEAD"), cancellable = true)
@@ -63,7 +65,8 @@ public class DrawHeartsMixin {
         }
 
         // fire / lava / campfire / magma
-        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire")) {
+        if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
+                customFire[0], customFire[1])) {
             render(ci,context,x,y,half,blinking,container,"fire",false);
         }
     }

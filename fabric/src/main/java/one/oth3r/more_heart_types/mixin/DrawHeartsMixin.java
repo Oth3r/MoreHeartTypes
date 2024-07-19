@@ -34,7 +34,7 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            render(ci,context,x,y,half,blinking,container,"starve",false);
+            render(ci,context,x,y,half,blinking,container,"starve",true);
         }
 
         // get the damageSource and make sure its valid

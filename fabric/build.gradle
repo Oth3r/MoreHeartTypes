@@ -1,7 +1,10 @@
 plugins {
     id 'base'
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'maven-publish'
+
+    id "com.modrinth.minotaur" version "2.+"
+    id 'net.darkhax.curseforgegradle' version '1.1.+'
 }
 
 version = project.mod_version
@@ -40,9 +43,8 @@ processResources {
     var replaceProperties = [
             version                : project.version,
             minecraft_version      : minecraft_version,
-            loader_version         : loader_version,
-            mod_id                 : mod_id,
-            mod_name               : mod_name
+            min_minecraft_version  : min_minecraft_version,
+            loader_version         : loader_version
     ]
 
     inputs.properties replaceProperties
@@ -95,4 +97,34 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+modrinth {
+    token = env.fetchOrNull('MODRINTH')
+    projectId = 'HJ465X71'
+    versionNumber = project.mod_version
+    versionName = "v${project.mod_version} [Fabric]"
+    versionType = "release"
+    uploadFile = remapJar
+    gameVersions = [project.minecraft_version]
+    loaders = ['fabric', 'quilt']
+    dependencies = [
+            new ModDependency('P7dR8mSH', 'required')
+    ]
+    changelog = file('changelog.md').text
+}
+
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = env.fetchOrNull('CURSEFORGE')
+
+    def mainFile = upload(1034723, remapJar)
+    mainFile.changelog = file('changelog.md')
+    mainFile.displayName = "v${project.mod_version} [Fabric]"
+    mainFile.addModLoader("fabric", 'quilt')
+    mainFile.releaseType = "release"
+    mainFile.addEnvironment("client", "server")
 }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "more_heart_types",
   "version": "${version}",
-  "name": "${mod_name}",
+  "name": "More Heart Types",
   "description": "A mod that adds more heart textures when taking damage from certain types.",
   "authors": ["Oth3r", "ShanicMCA"],
   "contact": {
@@ -24,6 +24,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": ">=1.21 <=${minecraft_version}"
+    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}"
   }
 }

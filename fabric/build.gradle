@@ -106,7 +106,7 @@ modrinth {
     projectId = 'HJ465X71'
     versionNumber = project.mod_version
     versionName = "v${project.mod_version} [Fabric]"
-    versionType = "release"
+    versionType = "beta"
     uploadFile = remapJar
     gameVersions = minecraft_versions.split(",").toList()
     loaders = ['fabric', 'quilt']
@@ -125,7 +125,6 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.changelog = file('changelog.md')
     mainFile.displayName = "v${project.mod_version} [Fabric]"
     mainFile.addModLoader("fabric", 'quilt')
-    mainFile.releaseType = "release"
-    mainFile.gameVersions = minecraft_versions.split(",").toList()
+    mainFile.releaseType = "beta"
     mainFile.addEnvironment("client", "server")
 }

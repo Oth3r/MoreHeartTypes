@@ -108,7 +108,7 @@ modrinth {
     versionName = "v${project.mod_version} [Fabric]"
     versionType = "release"
     uploadFile = remapJar
-    gameVersions = [project.minecraft_version]
+    gameVersions = minecraft_versions.split(",").toList()
     loaders = ['fabric', 'quilt']
     dependencies = [
             new ModDependency('P7dR8mSH', 'required')
@@ -126,5 +126,6 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.displayName = "v${project.mod_version} [Fabric]"
     mainFile.addModLoader("fabric", 'quilt')
     mainFile.releaseType = "release"
+    mainFile.gameVersions = minecraft_versions.split(",").toList()
     mainFile.addEnvironment("client", "server")
 }

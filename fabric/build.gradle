@@ -3,8 +3,7 @@ plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
 
-    id "com.modrinth.minotaur" version "2.+"
-    id 'net.darkhax.curseforgegradle' version '1.1.+'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
 version = project.mod_version
@@ -99,33 +98,35 @@ publishing {
     }
 }
 
-import com.modrinth.minotaur.dependencies.ModDependency
+publishMods {
+    changelog = file('../changelog.md').text
+    type = STABLE
 
-modrinth {
-    token = env.fetchOrNull('MODRINTH')
-    projectId = 'HJ465X71'
-    versionNumber = project.mod_version
-    versionName = "v${project.mod_version} [Fabric]"
-    versionType = "release"
-    uploadFile = remapJar
-    gameVersions = minecraft_versions.split(",").toList()
-    loaders = ['fabric', 'quilt']
-    dependencies = [
-            new ModDependency('P7dR8mSH', 'required')
-    ]
-    changelog = file('changelog.md').text
-}
+    file = remapJar.archiveFile
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
 
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
+    version = mod_version
+    displayName = "v${mod_version} [Fabric]"
 
-tasks.register('publishCurseForge', TaskPublishCurseForge) {
-    apiToken = env.fetchOrNull('CURSEFORGE')
+    curseforge {
+        accessToken = env.fetchOrNull('CURSEFORGE')
+        projectId = "1034723"
+        projectSlug = "more-heart-types"
+        minecraftVersions.addAll(minecraft_versions.split(",").toList())
 
-    def mainFile = upload(1034723, remapJar)
-    mainFile.changelog = file('changelog.md')
-    mainFile.displayName = "v${project.mod_version} [Fabric]"
-    mainFile.addModLoader("fabric", 'quilt')
-    mainFile.releaseType = "release"
-    mainFile.gameVersions = minecraft_versions.split(",").toList()
-    mainFile.addEnvironment("client", "server")
+        requires("fabric-api")
+
+        announcementTitle = "Download from CurseForge"
+    }
+
+    modrinth {
+        accessToken = env.fetchOrNull('MODRINTH')
+        projectId = "HJ465X71"
+        minecraftVersions.addAll(minecraft_versions.split(",").toList())
+
+        requires("fabric-api")
+
+        announcementTitle = "Download from Modrinth"
+    }
 }

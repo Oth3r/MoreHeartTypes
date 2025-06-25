@@ -15,6 +15,14 @@ base {
 
 repositories {
     maven {
+        name = "DevAuth"
+        url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1"
+    }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
         name "oth3rMavenSnapshots"
         url "https://maven.oth3r.one/snapshots"
     }
@@ -44,8 +52,10 @@ dependencies {
 
     // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
     modImplementation "one.oth3r:otterlib:${project.otterlib_version}-fabric"
+
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modRuntimeOnly "me.djtheredstoner:DevAuth-fabric:${project.devauth_version}"
 }
 
 processResources {

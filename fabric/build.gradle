@@ -14,11 +14,21 @@ base {
 }
 
 repositories {
+    maven {
+        name "oth3rMavenSnapshots"
+        url "https://maven.oth3r.one/snapshots"
+    }
 }
 
 sourceSets {
+    // Define a new sourceSet for the common code
     main {
-        resources.srcDirs = ['src/main/resources', '../common/src/main/resources']
+        java {
+            srcDir '../common/src/main/java'
+        }
+        resources {
+            srcDir '../common/src/main/resources'
+        }
     }
 }
 
@@ -34,6 +44,8 @@ dependencies {
 
     // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation "one.oth3r:otterlib:${project.otterlib_version}-fabric"
 }
 
 processResources {
@@ -43,6 +55,8 @@ processResources {
             version                : project.version,
             minecraft_version      : minecraft_version,
             min_minecraft_version  : min_minecraft_version,
+            otterlib_version       : "${otterlib_version}-fabric",
+            otterlib_max_version   : "${otterlib_max_version}-fabric",
             loader_version         : loader_version
     ]
 

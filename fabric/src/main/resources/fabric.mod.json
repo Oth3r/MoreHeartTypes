@@ -24,6 +24,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}"
+    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}",
+    "otterlib": ">=${otterlib_version} <${otterlib_max_version}"
   }
 }

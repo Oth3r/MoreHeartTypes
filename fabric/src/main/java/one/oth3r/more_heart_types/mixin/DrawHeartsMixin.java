@@ -8,10 +8,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import one.oth3r.more_heart_types.Config;
-import one.oth3r.more_heart_types.HeartSetting;
-import one.oth3r.more_heart_types.HeartTypes;
-import one.oth3r.more_heart_types.MoreHeartTypes;
+import one.oth3r.more_heart_types.*;
 import one.oth3r.otterlib.registry.CustomFileReg;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,7 +32,7 @@ public class DrawHeartsMixin {
         // add a container boolean for when the heart type is a container
         boolean container = type.equals(InGameHud.HeartType.CONTAINER);
         // get the config
-        Config config = (Config) CustomFileReg.getFile(MoreHeartTypes.MOD_ID, "config");
+        Config config = (Config) CustomFileReg.getFile(ModData.ID, "config");
 
         // make sure the player is valid
         PlayerEntity player = this.client.player;
@@ -89,7 +86,7 @@ public class DrawHeartsMixin {
     @Unique
     private static boolean checkDamage(PlayerEntity player, int time, DamageSource damageSource, String... strings) {
         // check if the time is under the max
-        if (player.getWorld().getTime() - MoreHeartTypes.lastDamageTicks > time) return false;
+        if (player.getWorld().getTime() - ModData.ticksSinceLastDamage > time) return false;
         // check if the damage type matches the criteria
         for (String string : strings) {
             if (damageSource.getType().msgId().equals(string)) return true;

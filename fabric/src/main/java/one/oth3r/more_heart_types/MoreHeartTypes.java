@@ -2,20 +2,34 @@ package one.oth3r.more_heart_types;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.Version;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import one.oth3r.otterlib.registry.CustomFileReg;
 
 public class MoreHeartTypes implements ClientModInitializer {
-    // track the time since last damaged
-    public static long lastDamageTicks = 0;
+    /**
+     * returns the version of the mod.
+     * @return the version as a String.
+     */
+    public static String getVersion() {
+        return FabricLoader.getInstance().getModContainer(ModData.ID).orElseThrow().getMetadata().getVersion().getFriendlyString();
+    }
 
-    public static final String MOD_ID = "more_heart_types";
-    public static final Version VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow().getMetadata().getVersion();
-    public static final Logger LOGGER = LogManager.getLogger("More Heart Types");
+    /**
+     * returns the directory where the config file is stored.
+     * @return the config directory path as a String.
+     */
+    public static String getConfigDir() {
+        return FabricLoader.getInstance().getConfigDir().toFile()+"/more_heart_types/";
+    }
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Successfully loaded More Heart Types v{}!", VERSION);
+        // register all heart types
+        HeartTypes.getHeartTypes().forEach(HeartRegistry::register);
+        // register the config file to OtterLib, for handling
+        CustomFileReg.registerFile(ModData.ID,new CustomFileReg.FileEntry<>(Config.ID,new Config(),true,true));
+
+        ModData.LOGGER.info("Successfully loaded More Heart Types %s!", ModData.VERSION);
+
+        //todo config screen
     }
 }

@@ -86,15 +86,15 @@ public class HeartSetting {
         String heartPath = "hud/heart/" + id;
         if (container) {
             if (this.container == null || !this.container) return null;
-            return Identifier.of(MoreHeartTypes.MOD_ID, heartPath+"_container"+ (blinking ? "_blinking" : ""));
+            return Identifier.of(ModData.ID, heartPath+"_container"+ (blinking ? "_blinking" : ""));
         }
         // add half or full based on the heart
         heartPath += (half ? "_half" : "_full");
 
         // display hardcore if enabled
-        if (hardcore && this.hardcore != null && this.hardcore) return Identifier.of(MoreHeartTypes.MOD_ID, heartPath+"_hardcore");
+        if (hardcore && this.hardcore != null && this.hardcore) return Identifier.of(ModData.ID, heartPath+"_hardcore");
         // display normal hearts if enabled
-        if (this.normal != null && this.normal) return Identifier.of(MoreHeartTypes.MOD_ID, heartPath);
+        if (this.normal != null && this.normal) return Identifier.of(ModData.ID, heartPath);
         // nothing can be displayed
         else return null;
     }

@@ -48,7 +48,7 @@ public class Config implements CustomFile<Config> {
 
     @Override
     public Path getFilePath() {
-        return Paths.get(MoreHeartTypes.CONFIG_DIR,"config.json");
+        return Paths.get(ModData.CONFIG_DIR,"config.json");
     }
 
     @Override

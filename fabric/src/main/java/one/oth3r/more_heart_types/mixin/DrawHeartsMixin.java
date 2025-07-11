@@ -8,7 +8,11 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import one.oth3r.more_heart_types.Config;
+import one.oth3r.more_heart_types.HeartSetting;
+import one.oth3r.more_heart_types.HeartTypes;
 import one.oth3r.more_heart_types.MoreHeartTypes;
+import one.oth3r.otterlib.registry.CustomFileReg;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,6 +34,8 @@ public class DrawHeartsMixin {
         if (!(type.equals(InGameHud.HeartType.NORMAL) || type.equals(InGameHud.HeartType.CONTAINER))) return;
         // add a container boolean for when the heart type is a container
         boolean container = type.equals(InGameHud.HeartType.CONTAINER);
+        // get the config
+        Config config = (Config) CustomFileReg.getFile(MoreHeartTypes.MOD_ID, "config");
 
         // make sure the player is valid
         PlayerEntity player = this.client.player;
@@ -37,7 +43,7 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            render(ci,context,x,y,half,blinking,container,"starve",true);
+            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.STARVING_ID));
         }
 
         // get the damageSource and make sure its valid
@@ -47,28 +53,28 @@ public class DrawHeartsMixin {
 
         // thorns / cactus / berry bush
         if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
-            render(ci,context,x,y,half,blinking,container,"thorns",true);
+            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.PRICKLY_ID));
         }
 
         // suffocation
         if (checkDamage(player, 20, damageSource,"inWall")) {
-            render(ci,context,x,y,half,blinking,container,"suffocate",false);
+            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.SUFFOCATING_ID));
         }
 
         // drowning
         if (checkDamage(player, 20, damageSource,"drown")) {
-            render(ci,context,x,y,half,blinking,container,"drown",false);
+            render(ci,context,x,y,half,blinking,container, config.getHeartSetting(HeartTypes.DROWNING_ID));
         }
 
         // void
         if (checkDamage(player, 20, damageSource,"outOfWorld")) {
-            render(ci,context,x,y,half,blinking,container,"void",false);
+            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.VOID_ID));
         }
 
         // fire / lava / campfire / magma
         if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
                 customFire[0], customFire[1])) {
-            render(ci,context,x,y,half,blinking,container,"fire",false);
+            render(ci,context,x,y,half,blinking,container, config.getHeartSetting(HeartTypes.FIRE_ID));
         }
     }
 
@@ -93,23 +99,13 @@ public class DrawHeartsMixin {
 
     /**
      * renders the heart
-     * @param name the name for the heart texture
-     * @param renderContainer if there is a custom container for the heart
+     * @param heartSetting the heart setting to use for rendering
      */
     @Unique
-    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, String name, boolean renderContainer) {
+    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, HeartSetting heartSetting) {
         // get the textures
-        Identifier texture = Identifier.of("hud/heart/"+name+"_full");
-        if (half) texture = Identifier.of("hud/heart/"+name+"_half");
-
-        // if container texture
-        if (container) {
-            // quit if theres no custom container texture
-            if (!renderContainer) return;
-            // get the container textures
-            texture = Identifier.of("hud/heart/"+name+"_container");
-            if (blinking) texture = Identifier.of("hud/heart/"+name+"_container_blinking");
-        }
+        Identifier texture = heartSetting.getIdentifier(blinking,half,false,container);
+        if (texture == null) return; // if the texture is null, do not render
 
         // draw the texture
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, 9, 9);

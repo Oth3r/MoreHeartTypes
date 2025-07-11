@@ -9,6 +9,8 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import one.oth3r.more_heart_types.*;
+import one.oth3r.more_heart_types.heart.HeartSetting;
+import one.oth3r.more_heart_types.heart.HeartTypes;
 import one.oth3r.otterlib.registry.CustomFileReg;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

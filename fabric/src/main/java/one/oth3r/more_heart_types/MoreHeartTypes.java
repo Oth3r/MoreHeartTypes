@@ -2,6 +2,8 @@ package one.oth3r.more_heart_types;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import one.oth3r.more_heart_types.heart.HeartRegistry;
+import one.oth3r.more_heart_types.heart.HeartTypes;
 import one.oth3r.otterlib.registry.CustomFileReg;
 
 public class MoreHeartTypes implements ClientModInitializer {

@@ -1,6 +1,7 @@
-package one.oth3r.more_heart_types;
+package one.oth3r.more_heart_types.heart;
 
 import net.minecraft.util.Identifier;
+import one.oth3r.more_heart_types.ModData;
 
 public class HeartSetting {
     private final String id;

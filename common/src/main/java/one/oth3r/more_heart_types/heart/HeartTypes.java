@@ -1,4 +1,4 @@
-package one.oth3r.more_heart_types;
+package one.oth3r.more_heart_types.heart;
 
 import java.util.ArrayList;
 

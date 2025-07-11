@@ -1,6 +1,9 @@
 package one.oth3r.more_heart_types;
 
 import com.google.gson.annotations.SerializedName;
+import one.oth3r.more_heart_types.heart.HeartRegistry;
+import one.oth3r.more_heart_types.heart.HeartSetting;
+import one.oth3r.more_heart_types.heart.HeartTypes;
 import one.oth3r.otterlib.base.OtterLogger;
 import one.oth3r.otterlib.file.CustomFile;
 import one.oth3r.otterlib.file.FileSettings;

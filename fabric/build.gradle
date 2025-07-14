@@ -140,7 +140,7 @@ publishMods {
         projectSlug = "more-heart-types"
         minecraftVersions.addAll(minecraft_versions.split(",").toList())
 
-        requires("fabric-api")
+        requires("fabric-api", "otterlib")
 
         announcementTitle = "Download from CurseForge"
     }
@@ -150,7 +150,7 @@ publishMods {
         projectId = "HJ465X71"
         minecraftVersions.addAll(minecraft_versions.split(",").toList())
 
-        requires("fabric-api")
+        requires("fabric-api", "otterlib")
 
         announcementTitle = "Download from Modrinth"
     }

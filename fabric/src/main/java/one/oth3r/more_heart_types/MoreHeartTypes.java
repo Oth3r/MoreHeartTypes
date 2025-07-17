@@ -28,7 +28,7 @@ public class MoreHeartTypes implements ClientModInitializer {
         // register all heart types
         HeartTypes.getHeartTypes().forEach(HeartRegistry::register);
         // register the config file to OtterLib, for handling
-        CustomFileReg.registerFile(ModData.ID,new CustomFileReg.FileEntry<>(Config.ID,new Config(),true,true));
+        CustomFileReg.registerFile(ModData.ID,new CustomFileReg.FileEntry(Config.ID,new Config(),true,true));
 
         ModData.LOGGER.info("Successfully loaded More Heart Types %s!", ModData.VERSION);
 

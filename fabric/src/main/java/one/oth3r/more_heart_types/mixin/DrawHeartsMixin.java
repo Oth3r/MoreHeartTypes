@@ -1,9 +1,9 @@
 package one.oth3r.more_heart_types.mixin;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,7 +107,7 @@ public class DrawHeartsMixin {
         if (texture == null) return; // if the texture is null, do not render
 
         // draw the texture
-        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, 9, 9);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, texture, x, y, 9, 9);
         // cancel the drawing of the other texture
         ci.cancel();
     }

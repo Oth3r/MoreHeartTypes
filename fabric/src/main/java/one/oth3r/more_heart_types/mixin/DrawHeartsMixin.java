@@ -107,7 +107,7 @@ public class DrawHeartsMixin {
         if (texture == null) return; // if the texture is null, do not render
 
         // draw the texture
-        context.drawGuiTexture(RenderLayer::getGuiTextured, texture, x, y, 9, 9);
+        context.drawGuiTexture(texture, x, y, 9, 9);
         // cancel the drawing of the other texture
         ci.cancel();
     }

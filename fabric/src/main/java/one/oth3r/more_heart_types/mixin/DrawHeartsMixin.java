@@ -88,7 +88,7 @@ public class DrawHeartsMixin {
     @Unique
     private static boolean checkDamage(PlayerEntity player, int time, DamageSource damageSource, String... strings) {
         // check if the time is under the max
-        if (player.getWorld().getTime() - ModData.ticksSinceLastDamage > time) return false;
+        if (player.getEntityWorld().getTime() - ModData.ticksSinceLastDamage > time) return false;
         // check if the damage type matches the criteria
         for (String string : strings) {
             if (damageSource.getType().msgId().equals(string)) return true;

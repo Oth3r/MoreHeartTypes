@@ -21,7 +21,7 @@ public class ClientDamageMixin extends AbstractClientPlayerEntity {
     public void damage(float health, CallbackInfo ci) {
         float change = this.getHealth() - health;
         if (change > 0.0F) {
-            ModData.ticksSinceLastDamage = this.getWorld().getTime();
+            ModData.ticksSinceLastDamage = this.getEntityWorld().getTime();
         }
 
     }

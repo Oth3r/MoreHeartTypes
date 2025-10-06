@@ -65,6 +65,7 @@ processResources {
     var replaceProperties = [
             version                : project.version,
             minecraft_version      : minecraft_version,
+            max_minecraft_version  : max_minecraft_version,
             min_minecraft_version  : min_minecraft_version,
             otterlib_version       : "${otterlib_version}-fabric",
             otterlib_max_version   : "${otterlib_max_version}-fabric",

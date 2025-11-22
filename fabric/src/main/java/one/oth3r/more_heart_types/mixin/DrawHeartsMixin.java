@@ -42,7 +42,7 @@ public class DrawHeartsMixin {
 
         // starving, apply when hunger effect is active
         if (player.hasStatusEffect(StatusEffects.HUNGER)) {
-            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.STARVING_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore,config.getHeartSetting(HeartTypes.STARVING_ID));
         }
 
         // get the damageSource and make sure its valid
@@ -52,28 +52,28 @@ public class DrawHeartsMixin {
 
         // thorns / cactus / berry bush
         if (checkDamage(player, 20, damageSource,"cactus","thorns","sweetBerryBush")) {
-            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.PRICKLY_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore,config.getHeartSetting(HeartTypes.PRICKLY_ID));
         }
 
         // suffocation
         if (checkDamage(player, 20, damageSource,"inWall")) {
-            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.SUFFOCATING_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore,config.getHeartSetting(HeartTypes.SUFFOCATING_ID));
         }
 
         // drowning
         if (checkDamage(player, 20, damageSource,"drown")) {
-            render(ci,context,x,y,half,blinking,container, config.getHeartSetting(HeartTypes.DROWNING_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore, config.getHeartSetting(HeartTypes.DROWNING_ID));
         }
 
         // void
         if (checkDamage(player, 20, damageSource,"outOfWorld")) {
-            render(ci,context,x,y,half,blinking,container,config.getHeartSetting(HeartTypes.VOID_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore,config.getHeartSetting(HeartTypes.VOID_ID));
         }
 
         // fire / lava / campfire / magma
         if (checkDamage(player, 20, damageSource,"lava","onFire","inFire","hotFloor","campfire",
                 customFire[0], customFire[1])) {
-            render(ci,context,x,y,half,blinking,container, config.getHeartSetting(HeartTypes.FIRE_ID));
+            render(ci,context,x,y,half,blinking,container,hardcore, config.getHeartSetting(HeartTypes.FIRE_ID));
         }
     }
 
@@ -101,9 +101,9 @@ public class DrawHeartsMixin {
      * @param heartSetting the heart setting to use for rendering
      */
     @Unique
-    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, HeartSetting heartSetting) {
+    private static void render(CallbackInfo ci, DrawContext context, int x, int y, boolean half, boolean blinking, boolean container, boolean hardcore, HeartSetting heartSetting) {
         // get the textures
-        Identifier texture = heartSetting.getIdentifier(blinking,half,false,container);
+        Identifier texture = heartSetting.getIdentifier(blinking,half,hardcore,container);
         if (texture == null) return; // if the texture is null, do not render
 
         // draw the texture

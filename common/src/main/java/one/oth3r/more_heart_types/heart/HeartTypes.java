@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class HeartTypes {
     public static final String DROWNING_ID = "drown";
     public static final String FIRE_ID = "fire";
-    public static final String STARVING_ID = "starve";
+    public static final String STARVING_ID = "starving";
     public static final String SUFFOCATING_ID = "suffocate";
     public static final String PRICKLY_ID = "prickly";
     public static final String VOID_ID = "void";

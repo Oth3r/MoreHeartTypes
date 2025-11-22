@@ -17,7 +17,7 @@ public class Config implements CustomFile<Config> {
     public static final String ID = "config";
 
     @SerializedName("version")
-    private double version = 1.0;
+    private double version = 1.1;
     @SerializedName("heart_settings")
     private ArrayList<HeartSetting> heartSettings = HeartRegistry.getHeartSettings();
 
@@ -80,6 +80,16 @@ public class Config implements CustomFile<Config> {
             if (heartSettings.stream().noneMatch(hs -> hs.getId().equals(heartSetting.getId()))) {
                 heartSettings.add(heartSetting);
             }
+        }
+        if (version == 1.0) {
+            for (HeartSetting heartSetting : heartSettings) {
+                // set hardcore to true if the normal hearts are enabled
+                heartSetting.setHardcore(heartSetting.getNormal());
+                // if the heart type is not fire, set blinking to true (fire doesn't support blinking)
+                if (!heartSetting.getId().equals(HeartTypes.FIRE_ID)) heartSetting.setBlinking(true);
+
+            }
+            version = 1.1;
         }
     }
 

@@ -16,12 +16,12 @@ public class HeartTypes {
      */
     public static ArrayList<HeartSetting> getHeartTypes() {
         ArrayList<HeartSetting> heartSettings = new ArrayList<>();
-        heartSettings.add(new HeartSetting.Builder(DROWNING_ID).build());
-        heartSettings.add(new HeartSetting.Builder(FIRE_ID).build());
-        heartSettings.add(new HeartSetting.Builder(STARVING_ID).container(true).build());
-        heartSettings.add(new HeartSetting.Builder(SUFFOCATING_ID).build());
-        heartSettings.add(new HeartSetting.Builder(PRICKLY_ID).container(true).build());
-        heartSettings.add(new HeartSetting.Builder(VOID_ID).build());
+        heartSettings.add(new HeartSetting.Builder(DROWNING_ID).hardcore().container().blinking().build());
+        heartSettings.add(new HeartSetting.Builder(FIRE_ID).hardcore().container().build());
+        heartSettings.add(new HeartSetting.Builder(STARVING_ID).hardcore().container().blinking().build());
+        heartSettings.add(new HeartSetting.Builder(SUFFOCATING_ID).hardcore().blinking().build());
+        heartSettings.add(new HeartSetting.Builder(PRICKLY_ID).hardcore().container().blinking().build());
+        heartSettings.add(new HeartSetting.Builder(VOID_ID).hardcore().container().blinking().build());
 
         return heartSettings;
     }

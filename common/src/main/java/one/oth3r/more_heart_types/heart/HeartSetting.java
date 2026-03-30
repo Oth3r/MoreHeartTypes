@@ -1,6 +1,6 @@
 package one.oth3r.more_heart_types.heart;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import one.oth3r.more_heart_types.ModData;
 
 public class HeartSetting {
@@ -103,7 +103,7 @@ public class HeartSetting {
         if (container) {
             if (this.container == null || !this.container) return null;
             // add the container suffix, and if enabled and needed, add the blinking suffix
-            return Identifier.of(ModData.ID, heartPath+"_container" + (blinking ? "_blinking" : "")); // containers always blink
+            return Identifier.fromNamespaceAndPath(ModData.ID, heartPath+"_container" + (blinking ? "_blinking" : "")); // containers always blink
         }
 
         // add hardcore if enabled
@@ -116,6 +116,6 @@ public class HeartSetting {
         }
 
         // display the heart
-        return Identifier.of(ModData.ID, heartPath);
+        return Identifier.fromNamespaceAndPath(ModData.ID, heartPath);
     }
 }

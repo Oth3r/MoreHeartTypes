@@ -2,8 +2,8 @@ package one.oth3r.more_heart_types.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public class DrawHeartsMixin {
 
     @Unique private final String[] customFire = {"create.fan_lava", "create.fan_fire"};
@@ -28,11 +28,11 @@ public class DrawHeartsMixin {
     @Shadow @Final private Minecraft minecraft;
 
     @Inject(method = "extractHeart", at = @At(value = "HEAD"), cancellable = true)
-    private void drawHeart(GuiGraphicsExtractor graphics, Gui.HeartType type, int x, int y, boolean hardcore, boolean blinking, boolean half, CallbackInfo ci) {
+    private void drawHeart(GuiGraphicsExtractor graphics, Hud.HeartType type, int x, int y, boolean hardcore, boolean blinking, boolean half, CallbackInfo ci) {
         // only run if normal heart or a container heart
-        if (!(type.equals(Gui.HeartType.NORMAL) || type.equals(Gui.HeartType.CONTAINER))) return;
+        if (!(type.equals(Hud.HeartType.NORMAL) || type.equals(Hud.HeartType.CONTAINER))) return;
         // add a container boolean for when the heart type is a container
-        boolean container = type.equals(Gui.HeartType.CONTAINER);
+        boolean container = type.equals(Hud.HeartType.CONTAINER);
         // get the config
         Config config = (Config) CustomFileReg.getFile(ModData.ID, "config");
 

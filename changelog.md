@@ -1,8 +1,12 @@
-# v1.1.2.1
+# v1.1.2.2
+#### Changes:
+* bumped OtterLib version
+
+## Past Changes
+### v1.1.2.1
 #### Changes:
 * changed the maximum version to be up to 26.2 to account for the small patches
 
-## Past Changes
 ### v1.1.2.0
 
 #### Changes:
